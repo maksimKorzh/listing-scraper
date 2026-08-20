@@ -68,6 +68,23 @@ function clickRemoveSelector(e) {
     } else { alert("There is no such selector"); }
 }
 
+function selectLinks() {
+    if (scraperIsRunning()) {
+        alert("Cannot select links while scraper is running");
+        return;
+    } else if (scraperExists()) {
+        stopSelecting();
+        let scraper = getScraper();
+        let cardUrlSelector = "";
+        let nextPageSelector = ""
+        while (cardUrlSelector == "") cardUrlSelector = prompt("Paste card URL selector");
+        while (nextPageSelector == "") nextPageSelector = prompt("Paste next page selector");
+        scraper.cardUrlSelector = cardUrlSelector;
+        scraper.nextPageSelector = nextPageSelector;
+        setScraper(scraper);
+    }
+}
+
 function selectElements() {
     if (scraperIsRunning()) {
         alert("Cannot select elements while scraper is running");

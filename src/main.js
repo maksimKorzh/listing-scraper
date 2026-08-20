@@ -7,7 +7,7 @@ chrome.runtime.onMessage.addListener((message) => {
     else if (message.action == "start") start();
     else if (message.action == "stop") stop();
     else if (message.action == "download") download();
-    //else if (message.action == "links") selectElements();
+    else if (message.action == "links") selectLinks();
     else if (message.action == "select") selectElements();
     else if (message.action == "deselect") removeElements();
     else if (message.action == "highlight") highlightElements();

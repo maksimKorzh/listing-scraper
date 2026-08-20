@@ -7,6 +7,8 @@ function create() {
     if (!scraperExists()) {
         setScraper({
             "running": false,
+            "cardUrlSelector": "",
+            "nextPageSelector": "",
             "currentPage": "",
             "selectors": {},
             "listingUrls": [],
