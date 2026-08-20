@@ -16,6 +16,7 @@
     {
         "matches": ["<all_urls>"],
         "js": [
+            "scraper.js",
             "ui.js",
             "main.js"
         ],

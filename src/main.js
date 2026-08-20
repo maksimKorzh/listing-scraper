@@ -7,9 +7,11 @@ chrome.runtime.onMessage.addListener((message) => {
     else if (message.action == "start") start();
     else if (message.action == "stop") stop();
     else if (message.action == "download") download();
-    else if (message.action == "select") select(true, false);
-    else if (message.action == "deselect") select(false, false);
-    else if (message.action == "links") select(true, true);
+    //else if (message.action == "links") selectElements();
+    else if (message.action == "select") selectElements();
+    else if (message.action == "deselect") removeElements();
+    else if (message.action == "highlight") highlightElements();
+    else if (message.action == "done") stopSelecting();
 });
 
 // Extract useful data from target HTML page
