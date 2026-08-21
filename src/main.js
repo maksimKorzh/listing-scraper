@@ -8,52 +8,12 @@ chrome.runtime.onMessage.addListener((message) => {
     else if (message.action == "stop") stop();
     else if (message.action == "download") download();
     else if (message.action == "links") selectLinks();
+    else if (message.action == "pagination") selectPagination();
     else if (message.action == "select") selectElements();
     else if (message.action == "deselect") removeElements();
-    else if (message.action == "highlight") highlightElements();
+    else if (message.action == "preview") previewData();
     else if (message.action == "done") stopSelecting();
 });
-
-// Extract useful data from target HTML page
-function parseLinks(scraperStorage) {
-    let linkSelectors = document.getElementsByClassName("item-link");
-    for (let link of linkSelectors) scraperStorage.listingUrls.push(link.href);
-}
-
-// Navigate to the next listing URL
-function parseListing(scraperStorage) {
-    try {
-        // Extract features
-        let features = [];
-        let featureSelector = document.getElementsByClassName("details-property_features");
-
-        // Loop over features
-        for (let div of featureSelector) {
-            for (let ul of div.children) {
-                for (let li of ul.children) {
-                    // Collect features
-                    features.push(li.textContent.trim().replace("\n", ""));
-                }
-            }
-        }
-
-        // Extract listing data
-        let data = {
-            "url": location.href,
-            "title": document.getElementsByClassName("main-info__title-main")[0].innerHTML,
-            "price": document.getElementsByClassName("info-data-price")[0].children[0].innerHTML,
-            "features": features,
-            "description": document.getElementsByClassName("comment")[0].textContent.trim().replaceAll("\n", ""),
-        }
-
-        // Log extracted data to console
-        console.log(JSON.stringify(data, null, 2))
-        console.log("\nCurrent page:", scraperStorage.currentPage);
-
-        // Save listing to the browser local storage
-        scraperStorage.data.push(data)
-    } catch(e) {}
-}
 
 // Wait before going to the next page
 async function sleep(ms) {
@@ -61,56 +21,55 @@ async function sleep(ms) {
 }
 
 async function crawl() {
-    // Load scraper storage if available
-    let scraperStorage = JSON.parse(localStorage.getItem("scraper"));
+    let scraper = JSON.parse(localStorage.getItem("scraper"));
     
     // Do nothing if no scrape storage available
-    if (scraperStorage == null) return;
+    if (scraper == null) return;
     
-    else if (scraperStorage.running) {
+    else if (scraper.running) {
         // We are done crawling all listings on this page
-        if (scraperStorage.currentPage == location.href) {
+        if (scraper.currentPage == location.href) {
             // Go to the next page
-            scraperStorage.currentPage = "";
+            scraper.currentPage = "";
             location.href = document.getElementsByClassName("icon-arrow-right-after")[0].href
             return;
         }
         
         // We just landed on a page
-        if (scraperStorage.listingUrls.length == 0) {
+        if (scraper.listingUrls.length == 0) {
             // Get the list of listing URLs
-            parseLinks(scraperStorage);
+            parseLinks(scraper);
             
             // Store current page to back to it later
-            scraperStorage.currentPage = location.href;
+            scraper.currentPage = location.href;
             
             // Update scraper storage state in local browser storage
-            localStorage.setItem("scraper", JSON.stringify(scraperStorage));
+            localStorage.setItem("scraper", JSON.stringify(scraper));
         }
         
         // We are crawling through listing URLs within the current page
-        else parseListing(scraperStorage);
+        else parseListing(scraper);
         
         // Update URL index
-        scraperStorage.listingUrlIndex++;
+        scraper.listingUrlIndex++;
         
         // Update scraper storage state in local browser storage
-        localStorage.setItem("scraper", JSON.stringify(scraperStorage));
+        localStorage.setItem("scraper", JSON.stringify(scraper));
         
         // If no more URLs to crawl
-        if (scraperStorage.listingUrlIndex == scraperStorage.listingUrls.length) {
+        if (scraper.listingUrlIndex == scraper.listingUrls.length) {
             // Reset listing URL list
-            scraperStorage.listingUrls = [];
-            scraperStorage.listingUrlIndex = -1;
+            scraper.listingUrls = [];
+            scraper.listingUrlIndex = -1;
 
             // Update scraper storage state in local browser storage
-            localStorage.setItem("scraper", JSON.stringify(scraperStorage));
+            localStorage.setItem("scraper", JSON.stringify(scraper));
             
             // Wait for a while
             await sleep(DELAY);
             
             // Go to the next page
-            location.href = scraperStorage.currentPage;
+            location.href = scraper.currentPage;
         }
         
         // Otherwise we crawl through listings on current page
@@ -119,7 +78,7 @@ async function crawl() {
             await sleep(DELAY);
             
             // Navigate to listing URL
-            location.href = scraperStorage.listingUrls[scraperStorage.listingUrlIndex]
+            location.href = scraper.listingUrls[scraper.listingUrlIndex]
         }
     }
 };

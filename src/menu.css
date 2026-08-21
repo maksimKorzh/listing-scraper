@@ -9,25 +9,10 @@ html {
 }
 
 body {
-    padding: 16px;
+    padding: 12px;
     background: #f5f5f7;
     color: #222;
     font-family: Arial, sans-serif;
-}
-
-.header {
-    text-align: center;
-    padding-bottom: 10px;
-}
-
-.header h3 {
-    margin: 0;
-    font-size: 16px;
-    line-height: 1.4;
-}
-
-.header small {
-    color: #777;
 }
 
 .section {
@@ -67,21 +52,4 @@ button:hover, a.button:hover {
 
 button:active, a.button:active {
     background: #e2e2e2;
-}
-
-.footer {
-    margin-top: 16px;
-    text-align: center;
-}
-
-.email {
-    display: block;
-    margin-top: 10px;
-    color: #777;
-    font-size: 11px;
-    text-decoration: none;
-}
-
-.email:hover {
-    text-decoration: underline;
 }
