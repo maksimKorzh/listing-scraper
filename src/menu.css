@@ -3,7 +3,7 @@
 }
 
 html {
-    width: 280px;
+    width: 400px;
     margin: 0;
     overflow: auto;
 }
@@ -28,10 +28,18 @@ body {
     letter-spacing: 0.5px;
 }
 
+.button-row {
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+}
+
 button, a.button {
     display: block;
     width: 100%;
-    margin: 5px 0;
+    margin-top: 6px;;
     padding: 9px 12px;
     border: 1px solid #d0d0d0;
     border-radius: 6px;

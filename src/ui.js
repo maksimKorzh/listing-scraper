@@ -7,12 +7,15 @@ chrome.runtime.onMessage.addListener((message) => {
     else if (message.action == "start") startScraper();
     else if (message.action == "stop") stopScraper();
     else if (message.action == "download") downloadData();
-    else if (message.action == "links") selectLinks();
-    else if (message.action == "pagination") selectPagination();
+    else if (message.action == "clear") clearData();
+    else if (message.action == "links") setListings();
+    else if (message.action == "pagination") setPagination();
     else if (message.action == "select") selectElements();
     else if (message.action == "deselect") removeElements();
     else if (message.action == "done") stopSelecting();
     else if (message.action == "preview") previewData();
+    else if (message.action == "save") saveScraper();
+    else loadScraper(message.action);
 });
 
 function scraperStatus() {
@@ -21,7 +24,10 @@ function scraperStatus() {
 }
 
 function createScraper() {
-    if (!scraperExists()) {
+    if (scraperIsRunning()) {
+        alert("Cannot create scraper while scraper is running");
+        return;
+    } else if (!scraperExists()) {
         setScraper({
             "running": false,
             "cardUrlSelector": "",
@@ -31,17 +37,18 @@ function createScraper() {
             "listingUrls": [],
             "listingUrlIndex": -1,
             "data": []
-        });
-        alert("Scraper storage has been created");
+        }); alert("Scraper storage has been created");
     } else alert("Scraper storage already exists");
 }
 
 function removeScraper() {
-    if (!scraperExists()) alert("Scraper storage doesn't exist");
-    else {
+    if (scraperIsRunning()) {
+        alert("Cannot remove scraper while scraper is running");
+        return;
+    } else if (scraperExists()) {
         localStorage.removeItem("scraper");
         alert("Scraper storage has been removed");
-    }
+    } else alert("Scraper storage doesn't exist");
 }
 
 function startScraper() {
@@ -68,15 +75,15 @@ function stopScraper() {
 }
 
 function downloadData() {
-    let scraperStorage = JSON.parse(localStorage.getItem("scraper"));
-    if (scraperStorage == null) alert("Scraper storage doesn't exist");
-    else {
-        let data = JSON.parse(localStorage.getItem("scraper")).data;
+    if (scraperIsRunning()) {
+        alert("Cannot download data while scraper is running");
+        return;
+    } else if (scraperExists()) {
+        let data = getScraper().data;
         const blob = new Blob(
             [JSON.stringify(data, null, 2)],
             { type: "text/json;charset=utf-8" }
-        );
-        const url = URL.createObjectURL(blob);
+        ); const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
         link.download = "listing-" + Date().toString().split(" ").slice(0, 5).join("-") + ".json";
@@ -85,9 +92,21 @@ function downloadData() {
     }
 }
 
-function selectLinks() {
+function clearData() {
+     if (scraperIsRunning()) {
+        alert("Cannot clear data while scraper is running");
+        return;
+    } else if (scraperExists()) {
+        let scraper = getScraper();
+        scraper.data = [];
+        setScraper(scraper);
+        alert("Scraper data has been cleared");
+    }
+}
+
+function setListings() {
     if (scraperIsRunning()) {
-        alert("Cannot select links while scraper is running");
+        alert("Cannot set listings while scraper is running");
         return;
     } else if (scraperExists()) {
         stopSelecting();
@@ -113,9 +132,9 @@ function selectLinks() {
     } else alert("Scraper doesn't exist");
 }
 
-function selectPagination() {
+function setPagination() {
     if (scraperIsRunning()) {
-        alert("Cannot select pagination while scraper is running");
+        alert("Cannot set pagination while scraper is running");
         return;
     } else if (scraperExists()) {
         stopSelecting();
@@ -152,7 +171,7 @@ function selectElements() {
 
 function removeElements() {
     if (scraperIsRunning()) {
-        alert("Cannot select elements while scraper is running");
+        alert("Cannot remove elements while scraper is running");
         return;
     } else if (scraperExists()) {
         alert("Remove elements you don't need");
@@ -164,25 +183,63 @@ function removeElements() {
 
 function previewData() {
     if (scraperIsRunning()) {
-        alert("Cannot select elements while scraper is running");
+        alert("Cannot preview data while scraper is running");
         return;
     } else if (scraperExists()) {
-        let scraper = getScraper();
-        let message = "";
-        let listingUrls = extractListingUrls(scraper.cardUrlSelector);
-        let nextPage = extractNextPage(scraper.nextPageSelector);
-        let data = JSON.stringify(extractData(), null, 4);
-        if (listingUrls != "") message += "Listing URLs:\n\n" + listingUrls + "\n\n";
-        if (nextPage != "" && nextPage != null) message += "Next Page:\n\n" + nextPage + "\n\n";
-        if (data != "{}") message += "Extracted data:\n\n" + data;
-        alert(message);
+        try {
+            let scraper = getScraper();
+            let message = "";
+            let listingUrls = extractListingUrls(scraper.cardUrlSelector);
+            let nextPage = extractNextPage(scraper.nextPageSelector);
+            let data = JSON.stringify(extractData(), null, 4);
+            if (listingUrls != "") message += "Listing URLs:\n\n" + listingUrls + "\n\n";
+            if (nextPage != "" && nextPage != null) message += "Next Page:\n\n" + nextPage + "\n\n";
+            if (data != "{}") message += "Extracted data:\n\n" + data;
+            alert(message);
+        } catch(e) { alert("Nothing has been selected"); }
     } else alert("Scraper doesn't exist");
 }
 
+function loadScraper(scraper) {
+    if (scraperIsRunning()) {
+        alert("Cannot load scraper while scraper is running");
+        return;
+    } else if (scraperExists()) {
+        try {
+            let newScraper = JSON.parse(scraper);
+            setScraper(newScraper);
+            alert("Scraper has been loaded");
+        } catch(e) { alert("Failed loading scraper"); }
+    } else alert("Scraper doesn't exist");
+}
+
+function saveScraper() {
+    if (scraperIsRunning()) {
+        alert("Cannot download data while scraper is running");
+        return;
+    } else if (scraperExists()) {
+        let data = getScraper();
+        const blob = new Blob(
+            [JSON.stringify(data, null, 2)],
+            { type: "text/json;charset=utf-8" }
+        ); const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "scraper.json";
+        link.click();
+        URL.revokeObjectURL(url);
+    }
+}
+
 function stopSelecting() {
-    document.removeEventListener("mouseover", mouseover, true);
-    document.removeEventListener("click", clickAddSelector, true);
-    document.removeEventListener("click", clickRemoveSelector, true);
+    if (scraperIsRunning()) {
+        alert("Cannot stop selecting while scraper is running");
+        return;
+    } else if (scraperExists()) {
+        document.removeEventListener("mouseover", mouseover, true);
+        document.removeEventListener("click", clickAddSelector, true);
+        document.removeEventListener("click", clickRemoveSelector, true);
+    } else alert("Scraper doesn't exist");
 }
 
 function mouseover(e) {

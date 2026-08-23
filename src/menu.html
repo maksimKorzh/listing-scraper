@@ -6,24 +6,44 @@
         <div class="section">
             <div class="section-title">Scraper</div>
             <button id="status">Scraper Status</button>
-            <button id="start">Start Scraper</button>
-            <button id="stop">Stop Scraper</button>
+            <div class="button-row">
+                <button id="start">Start Scraper</button>
+                <button id="stop">Stop Scraper</button>
+            </div>
         </div>
         <div class="section">
             <div class="section-title">Storage</div>
-            <button id="create">Create Scraper</button>
-            <button id="remove">Remove Scraper</button>
-            <button id="download">Download Data</button>
-            <button id="download">Download Data</button>
+            <div class="button-row">
+                <button id="create">Create Scraper</button>
+                <button id="remove">Remove Scraper</button>
+            </div>
+            <div class="button-row">
+                <button id="download">Download Data</button>
+                <button id="clear">Clear Data</button>
+            </div>
         </div>
         <div class="section">
             <div class="section-title">Selectors</div>
-            <button id="links">Set Listings</button>
-            <button id="pagination">Set Pagination</button>
-            <button id="select">Select Element</button>
-            <button id="deselect">Remove Element</button>
-            <button id="done">Done Selecting</button>
-            <button id="preview">Preview Data</button>
+            <div class="button-row">
+                <button id="links">Set Listings</button>
+                <button id="pagination">Set Pagination</button>
+            </div>
+            <div class="button-row">
+                <button id="select">Select Element</button>
+                <button id="deselect">Remove Element</button>
+            </div>
+            <div class="button-row">
+                <button id="done">Done Selecting</button>
+                <button id="preview">Preview Data</button>
+            </div>
+        </div>
+        <div class="section">
+            <div class="section-title">Files</div>
+            <div class="button-row">
+                <button id="load">Load Scraper</button>
+                <button id="save">Save Scraper</button>
+                <input type="file" id="file" hidden>
+            </div>
         </div>
         <script src="menu.js"></script>
     </body>

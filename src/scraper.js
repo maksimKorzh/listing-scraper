@@ -1,4 +1,4 @@
-const DELAY = 5000;
+const DELAY = 3000;
 
 function getScraper() {
     return JSON.parse(localStorage.getItem("scraper"));
