@@ -25,6 +25,20 @@ Shows the current status of the scraper.
 
 Use this to check whether the scraper exists, is running or stopped.
 
+### Save Scraper
+
+Saves the current scraper configuration to a file.
+
+This allows you to keep a scraper configuration and reuse it later.
+
+Saved configurations can be useful when you want to scrape the same website again or share a scraper configuration.
+
+### Load Scraper
+
+Loads a previously saved scraper configuration from a file.
+
+After loading a scraper, you can review its configuration and use it for scraping.
+
 ### Start Scraper
 
 Starts the scraping process using the currently configured scraper.
@@ -122,24 +136,6 @@ Use this when you have selected all the elements you want to scrape.
 Shows a preview of the data that Listing Scraper is configured to collect.
 
 Use this before starting a full scrape to verify that your selectors are working correctly and that the expected data is being extracted.
-
----
-
-## Files
-
-### Save Scraper
-
-Saves the current scraper configuration to a file.
-
-This allows you to keep a scraper configuration and reuse it later.
-
-Saved configurations can be useful when you want to scrape the same website again or share a scraper configuration.
-
-### Load Scraper
-
-Loads a previously saved scraper configuration from a file.
-
-After loading a scraper, you can review its configuration and use it for scraping.
 
 ---
 
