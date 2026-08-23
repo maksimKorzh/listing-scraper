@@ -4,6 +4,12 @@
 
 Instead of creating scraping scripts manually, you can select elements directly on a webpage, configure listings and pagination, and let the scraper collect the data for you.
 
+## Demo
+
+See Listing Scraper in action:
+
+[▶️ Watch the demo on YouTube](https://youtu.be/8A1PLHHxJX0)
+
 ## Features
 
 - Visual element selection — select elements directly from a webpage
