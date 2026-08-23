@@ -1,4 +1,4 @@
-let highlighted = null;
+const DELAY = 5000;
 
 function getScraper() {
     return JSON.parse(localStorage.getItem("scraper"));
@@ -18,137 +18,6 @@ function scraperIsRunning() {
         let scraper = getScraper();
         return scraper.running;
     }
-}
-
-function mouseover(e) {
-    if (highlighted) {
-        if (highlighted.style.outline == "green solid 2px") {
-            highlighted = null;
-            return;
-        } highlighted.style.outline = "";
-    }
-    if (e.target.style.outline != "green solid 2px") {
-        highlighted = e.target;
-        highlighted.style.outline = "2px solid red";
-    }
-}
-
-function clickAddSelector(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    let scraper = getScraper();
-    let selector = getCssSelector(e.target);
-    if (e.target.style.outline == "green solid 2px") {
-        alert("You have already selected this element");
-        return;
-    }
-    e.target.style.outline = "2px solid green";
-    let name = prompt("How would you call this selector?");
-    try {
-        while (name == "" || scraper.selectors[name] != undefined) {
-            alert(`Invalid name "${name}"`);
-            name = prompt("How would you call this selector?");
-        }
-    } catch(e) {}
-    scraper.selectors[name] = selector;
-    setScraper(scraper);
-}
-
-function clickRemoveSelector(e) {
-    if (e.target.style.outline == "green solid 2px") {
-        let scraper = getScraper();
-        let selector = getCssSelector(e.target);
-        for (let key of Object.keys(scraper.selectors)) {
-            if (scraper.selectors[key] == selector) {
-                delete scraper.selectors[key];
-                alert(`Selector "${key}" has been removed`);
-            }
-        } e.target.style.outline = "";
-        setScraper(scraper);
-    } else { alert("There is no such selector"); }
-}
-
-function selectLinks() {
-    if (scraperIsRunning()) {
-        alert("Cannot select links while scraper is running");
-        return;
-    } else if (scraperExists()) {
-        stopSelecting();
-        let scraper = getScraper();
-        let cardUrlSelector = "";
-        while (cardUrlSelector == "")
-            try {
-                cardUrlSelector = prompt(
-                    "Paste card URL selector:\n\n" +
-                    "1. Open DevTools\n" + 
-                    "2. Rightclick listing card\n" +
-                    "3. Find <a href=\"path/to/listing.html\">\n" +
-                    "4. Rightclick element, select Copy -> Copy selector\n" +
-                    "5. Paste selector below\n\n" +
-                    "e.g. body > div > div:nth-child(1) > span:nth-child(2) > a"
-                ).replace(/:nth-child\(\d+\)/g, "");
-            } catch(e) { return; }
-        let listingUrls = extractListingUrls(cardUrlSelector);
-        if (confirm("Do you confirm extracted links?\n\n" + listingUrls)) {
-            scraper.cardUrlSelector = cardUrlSelector;
-            setScraper(scraper);
-        }
-    } else alert("Scraper doesn't exist");
-}
-
-function selectPagination() {
-    if (scraperIsRunning()) {
-        alert("Cannot select pagination while scraper is running");
-        return;
-    } else if (scraperExists()) {
-        stopSelecting();
-        let scraper = getScraper();
-        let nextPageSelector = "";
-        while (nextPageSelector == "") nextPageSelector = prompt(
-            "Paste next page selector:\n\n" +
-            "1. Open DevTools\n" + 
-            "2. Rightclick next page button" +
-            "3. Find <a href=\"path/to/next_page.html\"> or <button>Next</button>\n" +
-            "4. Rightclick element, select Copy -> Copy selector\n" +
-            "5. Paste selector below\n\n" +
-            "e.g. body > div > div:nth-child(2) > div.col-md-8 > nav > ul > li > a"
-        );
-        let nextPage = extractNextPage(nextPageSelector);
-        if (confirm("Do you confirm next page?\n\n" + nextPage)) {
-            scraper.nextPageSelector = nextPageSelector;
-            setScraper(scraper);
-        }
-    } else alert("Scraper doesn't exist");
-}
-
-function selectElements() {
-    if (scraperIsRunning()) {
-        alert("Cannot select elements while scraper is running");
-        return;
-    } else if (scraperExists()) {
-        stopSelecting();
-        document.addEventListener("mouseover", mouseover, true);
-        document.addEventListener("click", clickAddSelector, true);
-        alert("Select elements you want to extract text from");
-    } else alert("Scraper doesn't exist");
-}
-
-function removeElements() {
-    if (scraperIsRunning()) {
-        alert("Cannot select elements while scraper is running");
-        return;
-    } else if (scraperExists()) {
-        alert("Remove elements you don't need");
-        stopSelecting();
-        document.addEventListener("mouseover", mouseover, true);
-        document.addEventListener("click", clickRemoveSelector, true);
-    } else alert("Scraper doesn't exist");
-}
-
-function stopSelecting() {
-    document.removeEventListener("mouseover", mouseover, true);
-    document.removeEventListener("click", clickAddSelector, true);
-    document.removeEventListener("click", clickRemoveSelector, true);
 }
 
 function getCssSelector(element, all) {
@@ -198,23 +67,6 @@ function extractData() {
     } catch(e) { return {}; }
 }
 
-function previewData() {
-    if (scraperIsRunning()) {
-        alert("Cannot select elements while scraper is running");
-        return;
-    } else if (scraperExists()) {
-        let scraper = getScraper();
-        let message = "";
-        let listingUrls = extractListingUrls(scraper.cardUrlSelector);
-        let nextPage = extractNextPage(scraper.nextPageSelector);
-        let data = JSON.stringify(extractData(), null, 4);
-        if (listingUrls != "") message += "Listing URLs:\n\n" + listingUrls + "\n\n";
-        if (nextPage != "" && nextPage != null) message += "Next Page:\n\n" + nextPage + "\n\n";
-        if (data != "{}") message += "Extracted data:\n\n" + data;
-        alert(message);
-    } else alert("Scraper doesn't exist");
-}
-
 function parseLinks(scraper) {
     let linkSelectors = document.querySelectorAll(scraper.cardUrlSelector);
     for (let url of linkSelectors) scraper.listingUrls.push(url.href);
@@ -228,3 +80,35 @@ function parseListing(scraper) {
         scraper.data.push(data)
     } catch(e) {}
 }
+
+async function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function crawl() {
+    let scraper = getScraper();
+    if (scraper == null) return;
+    else if (scraper.running) {
+        if (scraper.currentPage == location.href) {
+            scraper.currentPage = "";
+            location.href = document.querySelector(scraper.nextPageSelector).href
+            return;
+        } else if (scraper.listingUrls.length == 0) {
+            parseLinks(scraper);
+            scraper.currentPage = location.href;
+            setScraper(scraper);
+        } else parseListing(scraper);
+        scraper.listingUrlIndex++;
+        setScraper(scraper);
+        if (scraper.listingUrlIndex == scraper.listingUrls.length) {
+            scraper.listingUrls = [];
+            scraper.listingUrlIndex = -1;
+            localStorage.setItem("scraper", JSON.stringify(scraper));
+            await sleep(DELAY);
+            location.href = scraper.currentPage;
+        } else {
+            await sleep(DELAY);
+            location.href = scraper.listingUrls[scraper.listingUrlIndex]
+        }
+    }
+}; crawl();
