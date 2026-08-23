@@ -37,8 +37,8 @@ function createScraper() {
             "listingUrls": [],
             "listingUrlIndex": -1,
             "data": []
-        }); alert("Scraper storage has been created");
-    } else alert("Scraper storage already exists");
+        }); alert("Scraper has been created");
+    } else alert("Scraper already exists");
 }
 
 function removeScraper() {
@@ -47,12 +47,12 @@ function removeScraper() {
         return;
     } else if (scraperExists()) {
         localStorage.removeItem("scraper");
-        alert("Scraper storage has been removed");
-    } else alert("Scraper storage doesn't exist");
+        alert("Scraper has been removed");
+    } else alert("Scraper doesn't exist");
 }
 
 function startScraper() {
-    if (!scraperExists()) alert("Scraper storage doesn't exist");
+    if (!scraperExists()) alert("Scraper doesn't exist");
     else if (scraperIsRunning()) alert("Scraper is already running");
     else {
         let scraper = getScraper();
@@ -64,7 +64,7 @@ function startScraper() {
 }
 
 function stopScraper() {
-    if (!scraperExists()) alert("Scraper storage doesn't exist");
+    if (!scraperExists()) alert("Scraper doesn't exist");
     else if (!scraperIsRunning()) alert("Scraper has already been stopped");
     else {
         let scraper = getScraper();
@@ -204,13 +204,13 @@ function loadScraper(scraper) {
     if (scraperIsRunning()) {
         alert("Cannot load scraper while scraper is running");
         return;
-    } else if (scraperExists()) {
+    } else {
         try {
             let newScraper = JSON.parse(scraper);
             setScraper(newScraper);
             alert("Scraper has been loaded");
         } catch(e) { alert("Failed loading scraper"); }
-    } else alert("Scraper doesn't exist");
+    }
 }
 
 function saveScraper() {

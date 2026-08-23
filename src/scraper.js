@@ -61,8 +61,11 @@ function extractData() {
     let scraper = getScraper();
     let data = {};
     try {
-        for (let key of Object.keys(scraper.selectors))
-            data[key] = document.querySelector(scraper.selectors[key]).textContent.trim();
+        for (let key of Object.keys(scraper.selectors)) {
+            let selector = document.querySelector(scraper.selectors[key]);
+            selector.style.outline = "2px solid green";
+            data[key] = selector.textContent.trim();
+        }
         return data;
     } catch(e) { return {}; }
 }
