@@ -228,7 +228,7 @@ function saveScraper() {
         link.download = "scraper.json";
         link.click();
         URL.revokeObjectURL(url);
-    }
+    } else alert("Scraper doesn't exist");
 }
 
 function stopSelecting() {
