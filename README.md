@@ -161,6 +161,8 @@ You can also **Save Scraper** after configuring it so you can load the same conf
 | Section | Button | Purpose |
 |---|---|---|
 | Scraper | Scraper Status | View scraper status |
+| Scraper | Load Scraper | Load a saved scraper |
+| Scraper | Save Scraper | Save the current scraper |
 | Scraper | Start Scraper | Start scraping |
 | Scraper | Stop Scraper | Stop scraping |
 | Storage | Create Scraper | Create a new scraper |
@@ -173,8 +175,6 @@ You can also **Save Scraper** after configuring it so you can load the same conf
 | Selectors | Remove Element | Remove a selected element |
 | Selectors | Done Selecting | Finish element selection |
 | Selectors | Preview Data | Preview scraped data |
-| Files | Load Scraper | Load a saved scraper |
-| Files | Save Scraper | Save the current scraper |
 
 ---
 
