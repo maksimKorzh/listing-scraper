@@ -94,7 +94,10 @@ async function crawl() {
     else if (scraper.running) {
         if (scraper.currentPage == location.href) {
             scraper.currentPage = "";
-            location.href = document.querySelector(scraper.nextPageSelector).href
+            if (scraper.nextPageSelector.includes("button")) {
+                document.querySelector(scraper.nextPageSelector).click();
+                location.reload();
+            } else location.href = document.querySelector(scraper.nextPageSelector).href
             return;
         } else if (scraper.listingUrls.length == 0) {
             parseLinks(scraper);

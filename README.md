@@ -31,6 +31,20 @@ Shows the current status of the scraper.
 
 Use this to check whether the scraper exists, is running or stopped.
 
+### Create Scraper
+
+Creates a new scraper configuration.
+
+A scraper contains the selectors and settings needed to tell Listing Scraper what data to collect and where to find it.
+
+You can create a scraper before configuring the elements you want to scrape.
+
+### Remove Scraper
+
+Removes the currently configured scraper.
+
+Use this when you want to discard the current scraper configuration and start over.
+
 ### Load Scraper
 
 Loads a previously saved scraper configuration from a file.
@@ -56,36 +70,6 @@ The scraper follows the configured listing and pagination settings and collects 
 Stops the currently running scraper.
 
 Use this if you want to interrupt scraping before it finishes.
-
----
-
-## Storage
-
-### Create Scraper
-
-Creates a new scraper configuration.
-
-A scraper contains the selectors and settings needed to tell Listing Scraper what data to collect and where to find it.
-
-You can create a scraper before configuring the elements you want to scrape.
-
-### Remove Scraper
-
-Removes the currently configured scraper.
-
-Use this when you want to discard the current scraper configuration and start over.
-
-### Download Data
-
-Downloads the data collected by the scraper.
-
-Use this after scraping has finished to save your results locally.
-
-### Clear Data
-
-Deletes the currently collected scraping data.
-
-This does **not** remove the scraper configuration. It only clears the data that has already been collected.
 
 ---
 
@@ -142,6 +126,22 @@ Use this when you have selected all the elements you want to scrape.
 Shows a preview of the data that Listing Scraper is configured to collect.
 
 Use this before starting a full scrape to verify that your selectors are working correctly and that the expected data is being extracted.
+
+---
+
+## Storage
+
+### Download Data
+
+Downloads the data collected by the scraper.
+
+Use this after scraping has finished to save your results locally.
+
+### Clear Data
+
+Deletes the currently collected scraping data.
+
+This does **not** remove the scraper configuration. It only clears the data that has already been collected.
 
 ---
 
