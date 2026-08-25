@@ -1,8 +1,7 @@
 var highlighted = null;
 
 chrome.runtime.onMessage.addListener((message) => {
-    if (message.action == "status") scraperStatus();
-    else if (message.action == "create") createScraper();
+    if (message.action == "create") createScraper();
     else if (message.action == "remove") removeScraper();
     else if (message.action == "start") startScraper();
     else if (message.action == "stop") stopScraper();
@@ -17,11 +16,6 @@ chrome.runtime.onMessage.addListener((message) => {
     else if (message.action == "save") saveScraper();
     else loadScraper(message.action);
 });
-
-function scraperStatus() {
-    if (scraperExists()) alert(`Scraper is ${(scraperIsRunning() ? "" : "not")} running`)
-    else alert("Scraper doesn't exist");
-}
 
 function createScraper() {
     if (scraperIsRunning()) {
