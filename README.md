@@ -25,12 +25,6 @@ See Listing Scraper in action:
 
 ## Scraper
 
-### Scraper Status
-
-Shows the current status of the scraper.
-
-Use this to check whether the scraper exists, is running or stopped.
-
 ### Create Scraper
 
 Creates a new scraper configuration.
