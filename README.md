@@ -166,21 +166,21 @@ You can also **Save Scraper** after configuring it so you can load the same conf
 
 | Section | Button | Purpose |
 |---|---|---|
+| Storage | Create Scraper | Create a new scraper |
+| Storage | Remove Scraper | Remove the current scraper |
 | Scraper | Scraper Status | View scraper status |
 | Scraper | Load Scraper | Load a saved scraper |
 | Scraper | Save Scraper | Save the current scraper |
 | Scraper | Start Scraper | Start scraping |
 | Scraper | Stop Scraper | Stop scraping |
-| Storage | Create Scraper | Create a new scraper |
-| Storage | Remove Scraper | Remove the current scraper |
-| Storage | Download Data | Download collected data |
-| Storage | Clear Data | Delete collected data |
 | Selectors | Set Listings | Configure listing links/items |
 | Selectors | Set Pagination | Configure page navigation |
 | Selectors | Select Element | Select data elements visually |
 | Selectors | Remove Element | Remove a selected element |
 | Selectors | Done Selecting | Finish element selection |
 | Selectors | Preview Data | Preview scraped data |
+| Storage | Download Data | Download collected data |
+| Storage | Clear Data | Delete collected data |
 
 ---
 
